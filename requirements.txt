@@ -1,0 +1,11 @@
+# Core experiment
+boto3>=1.34
+pydantic>=2.0
+
+# Figures
+matplotlib>=3.8
+numpy>=1.24
+
+# External-validity spot-check (run_mem0_spotcheck.py only)
+mem0ai>=2.0
+qdrant-client>=1.7

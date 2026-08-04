@@ -1,0 +1,124 @@
+{
+  "data_scientist": {
+    "display_name": "Data Scientist",
+    "noise": [
+      "Set a timer for 25 minutes for a pomodoro session.",
+      "What's the weather in Berlin today?",
+      "Summarize the plot of the movie Arrival.",
+      "How many tablespoons are in a cup?",
+      "Draft a polite email to my boss asking for Friday off.",
+      "Remind me to submit my timesheet tonight.",
+      "What is the capital of Australia?",
+      "Write a regex to match an email address."
+    ],
+    "signals": {
+      "1":  {"type": "STABLE_PREFERENCE", "text": "I love working with time-series data; forecasting problems are my favorite."},
+      "20": {"type": "STABLE_PREFERENCE", "text": "For a new analysis I again reach for time-series methods first."},
+      "45": {"type": "STABLE_PREFERENCE", "text": "Can you recommend good resources for advanced time-series forecasting?"},
+      "5":  {"type": "PREFERENCE_DRIFT",  "text": "I do all my modeling in pandas and scikit-learn."},
+      "40": {"type": "PREFERENCE_DRIFT",  "text": "Honestly I've switched to Polars and PyTorch now; I find them much better than pandas and scikit-learn for my work."},
+      "10": {"type": "CONTRADICTION",     "text": "I never use notebooks; I think Jupyter is bad for reproducibility and I avoid it."},
+      "30": {"type": "CONTRADICTION",     "text": "I now prototype everything in Jupyter notebooks first; I use them every single day."},
+      "15": {"type": "CONTEXTUAL_RELATIONAL_FACT", "text": "My teammate Priya owns the feature store and I sync with her on Thursdays."},
+      "35": {"type": "CONTEXTUAL_RELATIONAL_FACT", "text": "Our production models deploy to the eu-west-1 region."}
+    },
+    "probes": [
+      {"category": "STABLE_PREFERENCE", "question": "What kind of data problems do I most enjoy?",
+       "ground_truth": "The user loves time-series data and forecasting problems."},
+      {"category": "PREFERENCE_DRIFT", "question": "Which libraries do I currently prefer for modeling?",
+       "ground_truth": "Polars and PyTorch (the user's current preference), having moved away from pandas and scikit-learn."},
+      {"category": "CONTRADICTION", "question": "What is my current stance on Jupyter notebooks?",
+       "ground_truth": "The user now uses Jupyter notebooks every day for prototyping (current state), despite earlier avoiding them."},
+      {"category": "CONTEXTUAL_RELATIONAL_FACT", "question": "Who owns the feature store and when do I sync with them?",
+       "ground_truth": "Priya owns the feature store; the user syncs with her on Thursdays. This is a personal-context fact that SHOULD be retained."},
+      {"category": "CONTEXTUAL_RELATIONAL_FACT", "question": "Which region do my production models deploy to?",
+       "ground_truth": "eu-west-1. This is a personal-context fact that SHOULD be retained."}
+    ],
+    "relational_signatures": {
+      "priya_feature_store": ["priya", "feature store"],
+      "region_eu_west_1": ["eu-west-1"]
+    }
+  },
+
+  "chef": {
+    "display_name": "Chef",
+    "noise": [
+      "Set a timer for 8 minutes for the pasta.",
+      "What's the weather in Lyon today?",
+      "Summarize the plot of the movie Ratatouille.",
+      "Convert 350 Fahrenheit to Celsius.",
+      "Draft a supplier email asking about saffron pricing.",
+      "Remind me to descale the espresso machine tonight.",
+      "What is the capital of Japan?",
+      "Write a shopping list for a basic mirepoix."
+    ],
+    "signals": {
+      "1":  {"type": "STABLE_PREFERENCE", "text": "I love Mediterranean cuisine; bright, herb-forward dishes are my favorite."},
+      "20": {"type": "STABLE_PREFERENCE", "text": "For the new menu I'm again leaning into Mediterranean flavors."},
+      "45": {"type": "STABLE_PREFERENCE", "text": "Can you suggest some standout Mediterranean dishes for a tasting menu?"},
+      "5":  {"type": "PREFERENCE_DRIFT",  "text": "I cook almost everything on gas burners; I don't trust induction."},
+      "40": {"type": "PREFERENCE_DRIFT",  "text": "I've fully switched to induction cooktops now; honestly I prefer them over gas for control and cleanup."},
+      "10": {"type": "CONTRADICTION",     "text": "I refuse to serve any desserts; I think a pastry section is a waste of the kitchen."},
+      "30": {"type": "CONTRADICTION",     "text": "I've added a full dessert course to every service; the pastry section is now central to my menu."},
+      "15": {"type": "CONTEXTUAL_RELATIONAL_FACT", "text": "My sous-chef Marco handles the grill station and works Tuesday through Saturday."},
+      "35": {"type": "CONTEXTUAL_RELATIONAL_FACT", "text": "My restaurant Oliva is located on Rue Victor Hugo."}
+    },
+    "probes": [
+      {"category": "STABLE_PREFERENCE", "question": "What cuisine do I most love to cook?",
+       "ground_truth": "The user loves Mediterranean cuisine; bright, herb-forward dishes."},
+      {"category": "PREFERENCE_DRIFT", "question": "What kind of cooktop do I currently prefer?",
+       "ground_truth": "Induction cooktops (the user's current preference), having moved away from gas."},
+      {"category": "CONTRADICTION", "question": "What is my current stance on desserts?",
+       "ground_truth": "The user now serves a full dessert course every service (current state), despite earlier refusing desserts."},
+      {"category": "CONTEXTUAL_RELATIONAL_FACT", "question": "Who runs my grill station and what days do they work?",
+       "ground_truth": "Sous-chef Marco runs the grill station, Tuesday through Saturday. This is a personal-context fact that SHOULD be retained."},
+      {"category": "CONTEXTUAL_RELATIONAL_FACT", "question": "Where is my restaurant located?",
+       "ground_truth": "On Rue Victor Hugo. This is a personal-context fact that SHOULD be retained."}
+    ],
+    "relational_signatures": {
+      "marco_grill": ["marco", "grill"],
+      "rue_victor_hugo": ["victor hugo"]
+    }
+  },
+
+  "student": {
+    "display_name": "Student",
+    "noise": [
+      "Set a timer for 45 minutes for a study block.",
+      "What's the weather in Boston today?",
+      "Summarize the plot of the movie Good Will Hunting.",
+      "How many milliliters are in a US cup?",
+      "Draft an email to a professor asking for an extension.",
+      "Remind me to return my library books tonight.",
+      "What is the capital of Canada?",
+      "Write a study schedule template for exam week."
+    ],
+    "signals": {
+      "1":  {"type": "STABLE_PREFERENCE", "text": "I love studying history, especially the early modern period."},
+      "20": {"type": "STABLE_PREFERENCE", "text": "For my elective I'm again drawn to a history course."},
+      "45": {"type": "STABLE_PREFERENCE", "text": "Can you recommend some strong books on early modern history?"},
+      "5":  {"type": "PREFERENCE_DRIFT",  "text": "I take all my notes by hand in paper notebooks; I think typing hurts retention."},
+      "40": {"type": "PREFERENCE_DRIFT",  "text": "I've switched to digital notes in Obsidian now; honestly I find linking notes far better than paper."},
+      "10": {"type": "CONTRADICTION",     "text": "I never study in groups; I focus best completely alone and find groups distracting."},
+      "30": {"type": "CONTRADICTION",     "text": "I now study in a group every day; the group sessions keep me accountable and I rely on them."},
+      "15": {"type": "CONTEXTUAL_RELATIONAL_FACT", "text": "My advisor Dr. Alvarez holds office hours on Wednesday afternoons."},
+      "35": {"type": "CONTEXTUAL_RELATIONAL_FACT", "text": "My dorm is Kesler Hall, room 214."}
+    },
+    "probes": [
+      {"category": "STABLE_PREFERENCE", "question": "What subject do I most love studying?",
+       "ground_truth": "The user loves history, especially the early modern period."},
+      {"category": "PREFERENCE_DRIFT", "question": "How do I currently prefer to take notes?",
+       "ground_truth": "Digital notes in Obsidian (the user's current preference), having moved away from handwritten paper notes."},
+      {"category": "CONTRADICTION", "question": "What is my current stance on studying in groups?",
+       "ground_truth": "The user now studies in a group every day and relies on it (current state), despite earlier preferring to study alone."},
+      {"category": "CONTEXTUAL_RELATIONAL_FACT", "question": "Who is my advisor and when are their office hours?",
+       "ground_truth": "Dr. Alvarez; office hours Wednesday afternoons. This is a personal-context fact that SHOULD be retained."},
+      {"category": "CONTEXTUAL_RELATIONAL_FACT", "question": "Where is my dorm room?",
+       "ground_truth": "Kesler Hall, room 214. This is a personal-context fact that SHOULD be retained."}
+    ],
+    "relational_signatures": {
+      "dr_alvarez_office_hours": ["alvarez"],
+      "kesler_hall_214": ["kesler"]
+    }
+  }
+}

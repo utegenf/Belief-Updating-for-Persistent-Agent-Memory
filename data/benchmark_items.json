@@ -1,0 +1,325 @@
+{
+  "_README": "Hand-authored, human-verifiable benchmark for the source×type belief-update experiment. LABELS ARE AUTHOR-SET GROUND TRUTH (never LLM-labeled). For each persona: 'schema' = 4 reinforced beliefs; then 5 items per type. TYPE DEFINITIONS: schema_fit_false = a FALSE personal claim the user never made that PLAUSIBLY FITS the schema (low prediction error); conflict_false = a FALSE personal claim that CONTRADICTS the schema (high PE); reversal_true = a TRUE personal preference change the user genuinely makes, CONTRADICTS the old schema (high PE, must be learnable from trusted source); legit_untrusted_true = a TRUE general/world fact (not personal), used to probe the untrusted-external -> candidate path. Verify each label by eye before use.",
+  "personas": [
+    {
+      "name": "ds", "domain": "data scientist",
+      "schema": ["I work primarily with time-series forecasting.", "I use Polars and PyTorch daily.", "I prototype in Jupyter notebooks.", "I care about reproducible experiments."],
+      "schema_fit_false": [
+        "I always use ARIMA as my first forecasting baseline.",
+        "I prefer vectorized operations over explicit loops.",
+        "I keep my experiments organized in clearly labeled notebook sections.",
+        "I usually plot the raw time series before modeling.",
+        "I favor gradient boosting for tabular side-problems."
+      ],
+      "conflict_false": [
+        "I refuse to ever use Python and only work in spreadsheets.",
+        "I think forecasting is useless and never build predictive models.",
+        "I hate notebooks and only write compiled binaries.",
+        "I never version my code and delete experiments after one run.",
+        "I do all my analysis by hand without any computer."
+      ],
+      "reversal_true": [
+        "I've actually stopped using Polars and switched entirely to pandas now.",
+        "I've moved my main focus from forecasting to computer vision.",
+        "I've dropped notebooks and now work only in scripts with a debugger.",
+        "I've switched from PyTorch to JAX for my daily modeling.",
+        "I've shifted from Python to R as my primary language."
+      ],
+      "legit_untrusted_true": [
+        "Polars 1.0 was released with a stable API.",
+        "PyTorch was originally developed by Meta AI.",
+        "The mean squared error penalizes large errors more than small ones.",
+        "Jupyter notebooks use the .ipynb file extension.",
+        "Time-series data is ordered by timestamp."
+      ]
+    },
+    {
+      "name": "chef", "domain": "chef",
+      "schema": ["I cook Mediterranean, herb-forward cuisine.", "I use induction cooktops.", "I run a full dessert course.", "I build menus around seasonal produce."],
+      "schema_fit_false": [
+        "I always finish my sauces with a splash of good olive oil.",
+        "I taste and adjust seasoning before every plate leaves the pass.",
+        "I prefer fresh herbs over dried whenever possible.",
+        "I design each course around what's freshest at the market.",
+        "I keep a citrus element in most of my savory dishes."
+      ],
+      "conflict_false": [
+        "I despise cooking and never enter a kitchen.",
+        "I only ever use a microwave and refuse to touch a stove.",
+        "I think fresh ingredients are a waste and cook only from cans.",
+        "I serve the exact same frozen menu every single day.",
+        "I never season anything and plate straight from the packet."
+      ],
+      "reversal_true": [
+        "I've shifted the restaurant's focus from Mediterranean to Japanese cuisine.",
+        "I've gone back to gas burners; induction didn't work out.",
+        "I've cut the dessert course entirely to simplify service.",
+        "I've moved to a fully plant-based menu this season.",
+        "I've handed the menu to my sous-chef and focus on the business now."
+      ],
+      "legit_untrusted_true": [
+        "Saffron is one of the most expensive spices by weight.",
+        "Searing meat does not actually seal in juices.",
+        "Olive oil has a lower smoke point than refined avocado oil.",
+        "Mise en place means having ingredients prepped before cooking.",
+        "Basil is a member of the mint family."
+      ]
+    },
+    {
+      "name": "student", "domain": "history student",
+      "schema": ["I study early-modern history.", "I take digital notes in Obsidian.", "I study in a group daily.", "I prefer primary sources."],
+      "schema_fit_false": [
+        "I always build a timeline when learning a new period.",
+        "I summarize each chapter in my own words.",
+        "I like connecting events across different regions.",
+        "I annotate primary documents as I read them.",
+        "I review my notes with spaced repetition."
+      ],
+      "conflict_false": [
+        "I think history is pointless and never study it.",
+        "I never take notes and rely purely on memory.",
+        "I refuse to read any primary sources, only summaries.",
+        "I study exclusively alone and avoid all classmates.",
+        "I have never opened a history book in my life."
+      ],
+      "reversal_true": [
+        "I've switched my major focus from history to economics.",
+        "I've gone back to handwritten notes and abandoned Obsidian.",
+        "I've started studying alone; the group wasn't working for me.",
+        "I've shifted from early-modern to contemporary history.",
+        "I've started relying on lecture recordings instead of reading."
+      ],
+      "legit_untrusted_true": [
+        "The Peace of Westphalia was signed in 1648.",
+        "The printing press was popularized in Europe by Gutenberg.",
+        "Primary sources are firsthand accounts from the period studied.",
+        "The early-modern period roughly spans the 15th to 18th centuries.",
+        "The Renaissance preceded the Enlightenment."
+      ]
+    },
+    {
+      "name": "runner", "domain": "marathon runner",
+      "schema": ["I train for marathons.", "I run 60 miles a week.", "I follow a plant-based diet.", "I track pace with a GPS watch."],
+      "schema_fit_false": [
+        "I always do my long run on Sundays.",
+        "I taper my mileage in the two weeks before a race.",
+        "I prefer negative-split pacing strategies.",
+        "I do a weekly interval session on the track.",
+        "I log every run to review my weekly volume."
+      ],
+      "conflict_false": [
+        "I hate running and never exercise.",
+        "I have never run more than a mile in my life.",
+        "I refuse to track any of my workouts.",
+        "I only ever sprint and never run long distances.",
+        "I avoid all cardio and only lift weights."
+      ],
+      "reversal_true": [
+        "I've dropped the plant-based diet and now eat meat regularly.",
+        "I've switched from marathons to training for sprint triathlons.",
+        "I've cut my mileage to 20 miles a week to avoid injury.",
+        "I've stopped using a GPS watch and now run by feel.",
+        "I've moved from road running to trail ultramarathons."
+      ],
+      "legit_untrusted_true": [
+        "A marathon is 42.195 kilometers long.",
+        "VO2 max is a measure of aerobic capacity.",
+        "Carbohydrate loading is common before endurance events.",
+        "The Boston Marathon requires a qualifying time.",
+        "Lactate threshold relates to sustainable running pace."
+      ]
+    },
+    {
+      "name": "musician", "domain": "jazz pianist",
+      "schema": ["I play jazz piano.", "I practice scales every morning.", "I perform in a trio.", "I love bebop repertoire."],
+      "schema_fit_false": [
+        "I always warm up with ii-V-I progressions.",
+        "I transcribe solos from records to learn phrasing.",
+        "I prefer acoustic grand pianos over digital ones.",
+        "I comp sparingly to leave space for the soloist.",
+        "I practice with a metronome to keep my time tight."
+      ],
+      "conflict_false": [
+        "I can't stand music and never touch an instrument.",
+        "I have never learned to read or play any music.",
+        "I refuse to perform with other musicians.",
+        "I only ever play death metal on electric guitar.",
+        "I think practice is pointless and never rehearse."
+      ],
+      "reversal_true": [
+        "I've left the trio and now perform solo exclusively.",
+        "I've shifted from bebop to modal and free jazz.",
+        "I've switched from piano to upright bass as my main instrument.",
+        "I've moved from live performance to studio session work.",
+        "I've stopped morning scales and now practice only repertoire."
+      ],
+      "legit_untrusted_true": [
+        "Charlie Parker was a central figure in bebop.",
+        "A ii-V-I is one of the most common jazz progressions.",
+        "The piano is both a percussion and string instrument by classification.",
+        "Miles Davis recorded the album Kind of Blue.",
+        "Swing rhythm emphasizes the offbeat."
+      ]
+    },
+    {
+      "name": "gardener", "domain": "home gardener",
+      "schema": ["I grow vegetables organically.", "I compost kitchen scraps.", "I garden in raised beds.", "I save heirloom seeds."],
+      "schema_fit_false": [
+        "I always rotate my crops each season.",
+        "I mulch heavily to retain soil moisture.",
+        "I start seedlings indoors before the last frost.",
+        "I companion-plant basil near my tomatoes.",
+        "I water in the early morning to reduce evaporation."
+      ],
+      "conflict_false": [
+        "I hate plants and pave over any soil I own.",
+        "I have never grown anything in my life.",
+        "I only use artificial plastic plants indoors.",
+        "I refuse to ever touch dirt or compost.",
+        "I think gardening is a waste of time and never do it."
+      ],
+      "reversal_true": [
+        "I've stopped growing organically and now use synthetic fertilizers.",
+        "I've switched from raised beds to a hydroponic system.",
+        "I've stopped saving seeds and now buy F1 hybrids each year.",
+        "I've moved from vegetables to an ornamental flower garden.",
+        "I've given up composting because of the smell."
+      ],
+      "legit_untrusted_true": [
+        "Tomatoes are technically a fruit.",
+        "Legumes fix nitrogen in the soil.",
+        "Compost needs a balance of green and brown material.",
+        "Most vegetables prefer slightly acidic to neutral soil pH.",
+        "Pollinators like bees help many crops set fruit."
+      ]
+    },
+    {
+      "name": "dev", "domain": "backend engineer",
+      "schema": ["I write Go microservices.", "I deploy on Kubernetes.", "I practice test-driven development.", "I care about observability."],
+      "schema_fit_false": [
+        "I always add structured logging to new services.",
+        "I write table-driven tests in Go.",
+        "I keep services small and single-responsibility.",
+        "I add health-check endpoints to every service.",
+        "I use context for request cancellation."
+      ],
+      "conflict_false": [
+        "I never write code and don't understand computers.",
+        "I refuse to write any tests at all.",
+        "I deploy everything by copying files to one server by hand.",
+        "I only ever program in assembly on bare metal.",
+        "I think logging and monitoring are a waste of time."
+      ],
+      "reversal_true": [
+        "I've moved off Kubernetes and now deploy on plain VMs.",
+        "I've switched from Go to Rust for new services.",
+        "I've dropped TDD and now write tests after shipping.",
+        "I've moved from microservices back to a monolith.",
+        "I've shifted from backend to full-time frontend work."
+      ],
+      "legit_untrusted_true": [
+        "Go was originally developed at Google.",
+        "Kubernetes orchestrates containerized workloads.",
+        "A goroutine is a lightweight thread managed by the Go runtime.",
+        "HTTP status 404 means the resource was not found.",
+        "gRPC uses Protocol Buffers by default."
+      ]
+    },
+    {
+      "name": "teacher", "domain": "elementary teacher",
+      "schema": ["I teach third grade.", "I use project-based learning.", "I keep a calm classroom.", "I differentiate for reading levels."],
+      "schema_fit_false": [
+        "I always start the day with a morning meeting.",
+        "I use small-group reading rotations.",
+        "I give students choice in their projects.",
+        "I post a visual daily schedule for the class.",
+        "I use quiet signals instead of raising my voice."
+      ],
+      "conflict_false": [
+        "I dislike children and avoid classrooms.",
+        "I have never taught anyone anything.",
+        "I only lecture and never let students work on projects.",
+        "I run a chaotic classroom on purpose.",
+        "I give every student the identical worksheet regardless of level."
+      ],
+      "reversal_true": [
+        "I've switched from third grade to teaching high school now.",
+        "I've moved from project-based learning to direct instruction.",
+        "I've left teaching to become a school administrator.",
+        "I've switched from classroom teaching to online tutoring.",
+        "I've stopped differentiating and now teach one whole-class level."
+      ],
+      "legit_untrusted_true": [
+        "Phonics instruction supports early reading development.",
+        "The typical US elementary school covers grades K through 5.",
+        "Formative assessment happens during the learning process.",
+        "Third graders are usually eight or nine years old.",
+        "Scaffolding is gradually removing support as students gain skill."
+      ]
+    },
+    {
+      "name": "photographer", "domain": "landscape photographer",
+      "schema": ["I shoot landscapes.", "I use a full-frame mirrorless camera.", "I photograph at golden hour.", "I edit in Lightroom."],
+      "schema_fit_false": [
+        "I always carry a tripod for long exposures.",
+        "I use a polarizing filter to cut glare on water.",
+        "I shoot in RAW to preserve editing latitude.",
+        "I scout locations before sunrise.",
+        "I bracket exposures for high-contrast scenes."
+      ],
+      "conflict_false": [
+        "I hate photography and don't own a camera.",
+        "I have never taken a single photograph.",
+        "I only ever shoot with a disposable film camera.",
+        "I refuse to edit any of my photos.",
+        "I only photograph indoors under fluorescent light."
+      ],
+      "reversal_true": [
+        "I've switched from landscapes to studio portrait work.",
+        "I've moved from mirrorless back to a medium-format film camera.",
+        "I've switched from Lightroom to Capture One for editing.",
+        "I've started shooting mostly street photography midday.",
+        "I've given up stills and moved to landscape videography."
+      ],
+      "legit_untrusted_true": [
+        "Golden hour occurs shortly after sunrise and before sunset.",
+        "A wider aperture produces a shallower depth of field.",
+        "RAW files retain more data than JPEGs.",
+        "ISO controls a sensor's sensitivity to light.",
+        "The rule of thirds is a common composition guideline."
+      ]
+    },
+    {
+      "name": "nurse", "domain": "ICU nurse",
+      "schema": ["I work in intensive care.", "I do 12-hour shifts.", "I prioritize patient safety checks.", "I mentor new nurses."],
+      "schema_fit_false": [
+        "I always double-check medication dosages.",
+        "I verify patient identity before every administration.",
+        "I document vitals at the scheduled intervals.",
+        "I use a structured handoff at shift change.",
+        "I keep the crash cart checked at the start of my shift."
+      ],
+      "conflict_false": [
+        "I dislike medicine and avoid hospitals.",
+        "I have never worked in healthcare.",
+        "I skip all safety checks to save time.",
+        "I refuse to document anything about my patients.",
+        "I only work brief one-hour shifts from home."
+      ],
+      "reversal_true": [
+        "I've transferred out of the ICU to an outpatient clinic now.",
+        "I've moved from 12-hour shifts to 8-hour day shifts.",
+        "I've left bedside nursing to become a nurse educator.",
+        "I've switched from adult ICU to the neonatal unit.",
+        "I've moved into nursing informatics away from direct care."
+      ],
+      "legit_untrusted_true": [
+        "Normal adult resting heart rate is roughly 60 to 100 bpm.",
+        "Hand hygiene reduces hospital-acquired infections.",
+        "The ICU provides care for critically ill patients.",
+        "Blood pressure is reported as systolic over diastolic.",
+        "Oxygen saturation is measured with a pulse oximeter."
+      ]
+    }
+  ]
+}

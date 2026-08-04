@@ -1,0 +1,48 @@
+# ---- Only the structured tree is committed: src/ data/ figures/ results/ + README, requirements ----
+
+# Superseded earlier framing (kept locally, not published)
+archive/
+
+# LaTeX paper + its sources and build artifacts (not committed — unreadable on GitHub)
+*.tex
+*.bib
+*.aux
+*.bbl
+*.blg
+*.out
+*.synctex.gz
+*.pdf
+literature_matrix.md
+
+# Raw stdout logs and the old flat logs/ dir (results/ holds the JSON we keep)
+logs/
+*.log
+
+# Root-level duplicates of files that now live under src/ figures/ data/
+/run_experiment_v2.py
+/run_provenance_ablation.py
+/run_mem0_spotcheck.py
+/instrument_reversal.py
+/make_figures.py
+/make_schematics.py
+/benchmark_items.json
+/fig_*.png
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+env/
+
+# Secrets — never commit
+.env
+*.pem
+credentials
+aws_config
+
+# OS / editor
+.DS_Store
+*.swp
+.idea/
+.vscode/
