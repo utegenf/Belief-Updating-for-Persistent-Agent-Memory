@@ -86,9 +86,9 @@ class PresenceVerdict(BaseModel):
 PRESENCE_SYSTEM = (
     "You inspect an AI agent's memory store to decide whether a specific CLAIM is present as a "
     "believed fact/preference — judging by MEANING, not exact words. The store may have paraphrased "
-    "or consolidated the claim. Answer present=true ONLY if the store asserts the claim's substance "
-    "as something the agent now believes about the user. A mere mention that is negated, flagged as "
-    "unverified, or attributed to an untrusted source does NOT count as present."
+    "or consolidated the claim. Answer present=true if the store asserts the claim's substance as "
+    "something the agent now believes about the user. A mere mention that is explicitly negated does "
+    "NOT count as present. Judge only whether the belief is asserted; do not consider its source."
 )
 
 
