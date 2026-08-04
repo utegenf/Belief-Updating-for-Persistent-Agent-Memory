@@ -11,8 +11,9 @@ archive/
 *.blg
 *.out
 *.synctex.gz
-*.pdf
+belief_gate_paper.pdf
 literature_matrix.md
+# (figure PDFs under figures/ are committed; only the compiled paper PDF is ignored)
 
 # Raw stdout logs and the old flat logs/ dir (results/ holds the JSON we keep)
 logs/
