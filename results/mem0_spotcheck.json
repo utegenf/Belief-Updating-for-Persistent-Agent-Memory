@@ -4,7 +4,7 @@
     "trusted": 50,
     "errors": 0,
     "model": "anthropic.claude-sonnet-4-5-20250929-v1:0",
-    "embed": "amazon.titan-embed-text-v2:0"
+    "embed": "sentence-embeddings (retrieval only; not part of the finding)"
   },
   "rows": [
     {

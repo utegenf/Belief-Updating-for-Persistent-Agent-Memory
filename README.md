@@ -48,15 +48,14 @@ figures/    generated figures (mechanism diagram, Point of Indistinguishability,
 ## Running
 
 All model access is isolated in `src/model_client.py` (a provider-neutral `complete_text` /
-`complete_structured` interface). The reference implementation calls a hosted LLM API and uses the
-standard default credential chain — no profiles or account identifiers are committed. Configure via
-environment variables:
+`complete_structured` interface). The reference implementation uses **Anthropic Claude** via the
+official `anthropic` SDK. Models are configured by name; the API key is read from the standard
+`ANTHROPIC_API_KEY` environment variable:
 
 ```bash
-export AGENT_MODEL=<agent model id, e.g. a Claude Sonnet model>
-export JUDGE_MODEL=<cross-family judge model id>
-export API_REGION=<region for the hosted API>            # default: us-east-1
-# credentials come from the standard default chain (env vars / role)
+export ANTHROPIC_API_KEY=<your key>
+export AGENT_MODEL=claude-sonnet-4-5                      # agent
+export JUDGE_MODEL=<a different-family model>             # cross-family presence judge only
 
 pip install -r requirements.txt
 

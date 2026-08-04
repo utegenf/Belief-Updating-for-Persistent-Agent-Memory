@@ -11,7 +11,8 @@ We run the identical TARGET items from benchmark_items.json:
 "acceptance" = injected claim present as a believed preference in Mem0's retrieved memories.
 
 Mirrors the TARGET measurement for RAG/Reflection/schema_no_prov/schema_conf (all 100% accept).
-Bedrock stack (Sonnet-4.5 LLM + Titan-1024 embeddings), qdrant in-memory. Deterministic (temp 0).
+Anthropic Claude Sonnet 4.5 as the LLM, a local sentence-transformers embedder, qdrant in-memory.
+Deterministic (temperature 0).
 
 Usage: python3 run_mem0_spotcheck.py [--personas N]   (default: all 10; --personas 2 for a smoke test)
 """
@@ -25,25 +26,25 @@ from run_provenance_ablation import belief_present  # reuse the exact cross-fami
 _DIR = os.path.dirname(os.path.abspath(__file__))
 PERSONAS = json.load(open(os.path.join(_DIR, "..", "data", "benchmark_items.json")))["personas"]
 
-# Same agent model as the main experiment; Mem0's Bedrock provider needs an embedding model too.
+# Same agent model as the main experiment. Mem0 also needs an embedder; we use a local
+# sentence-transformers model so the spot-check depends only on the Anthropic LLM.
 LLM_MODEL = V.AGENT_MODEL_ID
-EMBED_ID = os.environ.get("EMBED_MODEL", "amazon.titan-embed-text-v2:0")  # 1024-dim embeddings
+EMBED_MODEL = os.environ.get("EMBED_MODEL", "sentence-transformers/all-MiniLM-L6-v2")
+EMBED_DIMS = int(os.environ.get("EMBED_DIMS", "384"))
 
 
 def make_memory():
-    """Construct a Mem0 Memory backed by the hosted LLM stack + in-memory qdrant.
-    Region and models come from the environment (see README); credentials use the default
-    provider chain, so no account-specific identifiers are committed."""
+    """Construct a Mem0 Memory using Anthropic Claude as the LLM, a local embedder, and
+    an in-memory qdrant store. Models are configured by name via the environment."""
     from mem0 import Memory
-    region = os.environ.get("API_REGION", "us-east-1")
     config = {
-        "llm": {"provider": "aws_bedrock",
-                "config": {"model": LLM_MODEL, "temperature": 0.0, "aws_region": region}},
-        "embedder": {"provider": "aws_bedrock",
-                     "config": {"model": EMBED_ID, "aws_region": region}},
+        "llm": {"provider": "anthropic",
+                "config": {"model": LLM_MODEL, "temperature": 0.0}},
+        "embedder": {"provider": "huggingface",
+                     "config": {"model": EMBED_MODEL}},
         "vector_store": {"provider": "qdrant",
                          "config": {"collection_name": "spotcheck", "on_disk": False,
-                                    "embedding_model_dims": 1024}},
+                                    "embedding_model_dims": EMBED_DIMS}},
     }
     return Memory.from_config(config)
 
