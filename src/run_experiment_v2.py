@@ -64,13 +64,15 @@ CATEGORY_POLICY = {
     "EVENT": EXCLUDE,
 }
 
-# Source-channel trust tiers (assigned by the harness; never inferred from content).
-TRUSTED_CHANNEL = "AUTHENTICATED_USER"
-UNTRUSTED_CHANNEL = "UNTRUSTED_TOOL"
+# Source-channel taxonomy (assigned by the harness; never inferred from content).
+# The study uses a binary trust distinction: a trusted (authenticated user) channel and an
+# untrusted (unauthenticated) channel.
+TRUSTED_CHANNEL   = "AUTHENTICATED_USER"   # direct user statement    (trusted)
+UNTRUSTED_CHANNEL = "UNTRUSTED_CHANNEL"    # unauthenticated source   (untrusted)
 
-# Fine-grained source identity (distinct from the coarse trust tier). Genuine user input
+# Fine-grained source identity (distinct from the coarse trust channel). Genuine user input
 # comes from PRIMARY_SOURCE; mimicry that passes the categorical gate on the authenticated
-# channel is attributed to a specific session later found COMPROMISED — the substrate for
+# channel is attributed to a specific session later found COMPROMISED: the substrate for
 # the remediability (provenance-purge) benchmark.
 PRIMARY_SOURCE = "user_primary"
 COMPROMISED_SOURCE = "user_session_47"
@@ -237,6 +239,8 @@ class SleepAgent:
         # confidence_threshold: if set (e.g. 0.5), admit personal claims by gate CONFIDENCE instead
         # of source — models the confidence-based memory baseline ("why isn't confidence enough?").
         # Mutually exclusive with provenance gating; when set, use_provenance is ignored for personal.
+        # use_provenance selects between source-aware ({trusted->trusted, untrusted->reject}) and
+        # source-blind (always trusted) admission for personal claims.
         self.use_provenance = use_provenance
         self.confidence_threshold = confidence_threshold
         self.episodic_memory: List[dict] = []
@@ -244,41 +248,31 @@ class SleepAgent:
         self.gate_log: List[dict] = []
 
     def _admission_status(self, category, trusted_src, gate_supported, confidence=None):
-        """(source x type) policy matrix — the core meaningful provenance variable.
+        """(source x type) policy — the core meaningful provenance variable.
 
         Three destinations:
-          - "trusted"   -> full belief, surfaced in answers (personal, from trusted source only)
-          - "candidate" -> evidence layer, NOT a belief, awaits verification (external facts, either
-                           source, differing confidence)
-          - None        -> not admitted (rejected outright: untrusted personal claim, transient event,
-                           or unsupported claim)
+          - "trusted"   -> full belief, surfaced in answers
+          - "candidate" -> evidence layer, NOT a belief, awaits verification
+          - None        -> not admitted (rejected outright: transient event, unsupported claim,
+                           or an untrusted personal claim under the source-aware policy)
 
-        Preserves the original Pillar 1 (agent does not rewrite world knowledge directly): external
-        facts NEVER become beliefs directly — they enter the evidence layer regardless of source.
-        Personal claims (preference / rule / relational-fact) require a TRUSTED source to enter
-        belief formation; untrusted personal claims are rejected outright.
-
-        Ablation baseline (use_provenance=False): source axis is ignored. Any admitted category is
-        stored as "trusted" (this is the no-provenance comparator — deliberately over-trusting)."""
+        The gate has three admission regimes, selected at construction:
+          * confidence_threshold set: source-blind confidence-baseline (schema_conf).
+          * use_provenance=True: source-aware (trusted-personal admitted, untrusted-personal rejected; schema_prov).
+          * use_provenance=False: source-blind (admit-all; schema_no_prov)."""
         if not gate_supported:
             return None  # unsupported claims never enter (independent of source)
-        # External facts go to the candidate/evidence layer under BOTH configurations — this
-        # preserves Pillar 1 (agent doesn't rewrite world knowledge directly) and ensures the
-        # ablation isolates only the source-x-personal-type axis, not category admission.
+
+        # External facts always route to candidate; personal claims go through the
+        # confidence / provenance / no-provenance branches.
         if category == "EXTERNAL_FACTS":
             return "candidate"
-        # Personal categories:
         if category not in ADMIT_CATEGORIES:
-            return None                  # EVENT etc.: episodic only
-        # ADMIT category (personal claim). Three admission regimes:
-        # (1) CONFIDENCE baseline: admit iff gate confidence exceeds threshold — source-blind.
-        #     Models confidence-based memory. A confidently-classified plausible lie is admitted.
+            return None
         if self.confidence_threshold is not None:
             return "trusted" if (confidence is not None and confidence >= self.confidence_threshold) else None
-        # (2) Provenance OFF (no-prov ablation baseline): source-blind, always trust.
         if not self.use_provenance:
             return "trusted"
-        # (3) Provenance ON (source x type): trusted source admits personal; untrusted rejects.
         return "trusted" if trusted_src else None
 
     def interact(self, episode: dict):
@@ -308,7 +302,7 @@ class SleepAgent:
             policy = CATEGORY_POLICY[gate.category]  # legacy, used only for gate_log
             channel = episode["channel"]
             trusted_src = (channel == TRUSTED_CHANNEL)
-            # The source×type policy inside _admission_status decides everything now — including
+            # The source x type policy inside _admission_status decides everything now, including
             # that EXTERNAL_FACTS route to the candidate/evidence layer instead of being excluded.
             # We pass the raw `supported` flag; _admission_status handles the category logic.
             status = self._admission_status(gate.category, trusted_src, gate.supported,

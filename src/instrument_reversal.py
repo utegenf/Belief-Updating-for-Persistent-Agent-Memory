@@ -1,10 +1,10 @@
 """Instrumented re-run of the CONTROL (true reversal / trusted) condition for schema_prov,
 to capture the Stage-1 admission -> Stage-2 consolidation trace of the dropped reversals.
 
-Deterministic (temperature 0), so it reproduces the same 2/50 drops as results/prov_final_n50.
-For each dropped reversal it records: the injected episode, the Stage-1 gate decision (admitted as
-trusted), and the Stage-2 consolidation prompt + returned belief set (where the belief fails to
-re-emit) -- evidencing that the loss is a consolidation/abstraction event, independent of origin.
+Deterministic (temperature 0), so it reproduces the same dropped reversals as
+results/prov_ablation_sonnet45.json. For each dropped reversal it records: the injected episode and
+the Stage-1 gate decision, showing the loss is a Stage-1 content-routing error (a durable preference
+change misclassified as a transient EVENT), independent of origin.
 
 Writes results/reversal_drops.json.
 """

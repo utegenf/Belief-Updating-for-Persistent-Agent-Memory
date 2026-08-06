@@ -10,19 +10,21 @@ content-based memory and evaluates a source-aware alternative.
 ## The idea
 
 A plausible fabrication that *fits* an agent's existing schema is assimilated as a trusted
-belief — because, on content alone, it is indistinguishable from a genuine update. We call this
+belief, because, on content alone, it is indistinguishable from a genuine update. We call this
 the **Point of Indistinguishability**. Content can tell you *what* a claim is, but not whether it
 should be *allowed to change* your beliefs; that requires knowing the origin.
 
 ## What we found
 
-- **Controlled ablation** (10 personas, `n=50` per condition, deterministic outcome inspection):
+- **Controlled ablation** (20 personas, `n=100` per condition, deterministic outcome inspection):
   source-blind and confidence-thresholded memory both assimilate the plausible fabrication in
   every case; a source-aware policy prevents it. Controls confirm the source-aware gate still
-  *learns* genuine trusted preference reversals (96%) and routes untrusted world facts to a
+  *learns* genuine trusted preference reversals (98%) and routes untrusted world facts to a
   candidate/evidence layer rather than trusting or discarding them.
+- **Cross-family:** the same pattern replicates on a second base-model family (Llama-4-Maverick),
+  indicating the failure is architectural, not model-specific.
 - **External validity:** Mem0, an off-the-shelf memory layer with no source-trust mechanism,
-  assimilates the same fabrication in **50/50** cases — locating the failure in the content-based
+  assimilates the same fabrication in **50/50** cases, locating the failure in the content-based
   consolidation *paradigm*, not in a weak in-house baseline.
 
 ## Repository layout
@@ -30,19 +32,19 @@ should be *allowed to change* your beliefs; that requires knowing the origin.
 ```
 src/        experiment + figure code
 data/       hand-authored benchmark (personas, schema, injected items; author-set ground truth)
-results/    experiment outputs (JSON) — the numbers behind the findings
+results/    experiment outputs (JSON): the numbers behind the findings
 figures/    generated figures (mechanism diagram, Point of Indistinguishability, result plots)
 ```
 
 ### `src/`
 | file | purpose |
 |---|---|
-| `model_client.py` | provider-neutral LLM interface (`complete_text` / `complete_structured`) — the only file with model-provider code |
+| `model_client.py` | provider-neutral LLM interface (`complete_text` / `complete_structured`); the only file with model-provider code |
 | `run_experiment_v2.py` | core: typed, provenanced belief store (`SleepAgent`) and the compared memory agents |
-| `run_provenance_ablation.py` | the source-aware ablation → `results/prov_final_n50.json` |
+| `run_provenance_ablation.py` | the source-aware ablation → `results/prov_ablation_sonnet45.json` (and `_llama4` for the cross-family run) |
 | `run_mem0_spotcheck.py` | external-validity anchor: identical target items through Mem0 |
 | `instrument_reversal.py` | traces why 2/50 reversals are dropped (a Stage-1 routing error) |
-| `make_figures.py` | result plots from `results/prov_final_n50.json` |
+| `make_figures.py` | result plots from `results/prov_ablation_sonnet45.json` |
 | `make_schematics.py` | concept diagrams (mechanism, Point of Indistinguishability) |
 
 ## Running
@@ -65,7 +67,7 @@ python3 src/make_figures.py              # result plots
 python3 src/make_schematics.py           # concept diagrams
 ```
 
-All model calls use temperature 0 (greedy decoding); variation across `n=50` comes from personas
+All model calls use temperature 0 (greedy decoding); variation across `n=100` comes from personas
 and items, not sampling. The core schema-agent metric is deterministic (source-id inspection, no
 LLM in the loop); a cross-family judge is used only for paraphrase-robust presence checks on the
 summarization baseline.

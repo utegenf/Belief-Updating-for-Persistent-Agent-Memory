@@ -9,6 +9,13 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 from matplotlib.patches import FancyBboxPatch, FancyArrowPatch
 
+# Serif font to match the LaTeX body text (paper style, not slide style).
+plt.rcParams.update({
+    "font.family": "serif",
+    "font.serif": ["Times New Roman", "DejaVu Serif", "STIXGeneral"],
+    "mathtext.fontset": "stix",
+})
+
 _DIR = os.path.dirname(os.path.abspath(__file__))
 
 # Okabe-Ito hues used only as thin borders / text accents (no solid fills, no shadows) —
@@ -47,43 +54,98 @@ def _save(fig, name):
 
 
 # =====================================================================
+# FIG 0 — the 2x2 that visually DEFINES the Point of Indistinguishability
+# =====================================================================
+def fig_2x2():
+    fig, ax = plt.subplots(figsize=(6.4, 4.4))
+    ax.set_xlim(0, 6.4); ax.set_ylim(0, 4.4); ax.axis("off")
+    fig.patch.set_facecolor("#FFFFFF"); ax.set_facecolor("#FFFFFF")
+
+    # grid geometry
+    x0, y0, cw, ch = 1.9, 0.6, 2.0, 1.45
+    cols = ["Trusted\nsource", "Untrusted\nsource"]
+    rows = ["Conflicts\nschema", "Fits\nschema"]  # bottom row first (y grows up)
+    # cell (row, col) -> (label, action-color, is_highlight)
+    cell = {
+        (1, 0): ("Learn",     TRUSTED,  False),   # fits + trusted
+        (1, 1): ("Blind spot", REJECTED, True),   # fits + untrusted  <-- Point of Indistinguishability
+        (0, 0): ("Revise",    TRUSTED,  False),   # conflicts + trusted
+        (0, 1): ("Reject",    MUTED,    False),   # conflicts + untrusted
+    }
+    for (r, c), (lbl, col, hi) in cell.items():
+        x = x0 + c * cw
+        y = y0 + r * ch
+        # highlighted cell: light red wash + bold red border; others: white + thin border
+        face = "#FBE9E3" if hi else "#FFFFFF"
+        ax.add_patch(FancyBboxPatch((x, y), cw - 0.08, ch - 0.08,
+                                    boxstyle="round,pad=0.01,rounding_size=0.02",
+                                    linewidth=2.0 if hi else 1.0,
+                                    edgecolor=REJECTED if hi else INK,
+                                    facecolor=face, zorder=3))
+        ax.text(x + (cw - 0.08)/2, y + (ch - 0.08)/2 + 0.16, lbl, ha="center", va="center",
+                fontsize=12 if hi else 11, fontweight="bold",
+                color=REJECTED if hi else col, zorder=4)
+        if hi:
+            ax.text(x + (cw - 0.08)/2, y + (ch - 0.08)/2 - 0.30,
+                    "fabrication accepted\nas genuine", ha="center", va="center",
+                    fontsize=7.5, style="italic", color=REJECTED, zorder=4)
+
+    # column headers (top)
+    for c, h in enumerate(cols):
+        ax.text(x0 + c*cw + (cw-0.08)/2, y0 + 2*ch + 0.28, h, ha="center", va="center",
+                fontsize=10, fontweight="bold", color=INK)
+    # row headers (left)
+    for r, h in enumerate(rows):
+        ax.text(x0 - 0.55, y0 + r*ch + (ch-0.08)/2, h, ha="center", va="center",
+                fontsize=10, fontweight="bold", color=INK, rotation=90)
+    # axis labels
+    ax.text(x0 + cw, y0 + 2*ch + 0.72, "ORIGIN", ha="center", fontsize=9, color=MUTED, style="italic")
+    ax.text(x0 - 1.15, y0 + ch, "CONTENT (prediction error)", ha="center", va="center",
+            fontsize=9, color=MUTED, style="italic", rotation=90)
+    ax.set_title("The Point of Indistinguishability", fontsize=12, color=INK, pad=8)
+    fig.tight_layout()
+    return _save(fig, "fig_2x2")
+
+
+# =====================================================================
 # FIG 1 — mechanism / hero schematic
 # =====================================================================
 def fig_mechanism():
-    fig, ax = plt.subplots(figsize=(10, 4.2))
-    ax.set_xlim(0, 10); ax.set_ylim(0, 4.2); ax.axis("off")
+    fig, ax = plt.subplots(figsize=(11, 4.4))
+    ax.set_xlim(0, 11); ax.set_ylim(0, 4.4); ax.axis("off")
     fig.patch.set_facecolor(SURF); ax.set_facecolor(SURF)
 
     # Experience in
-    _box(ax, (0.15, 1.7), 1.5, 0.8, "Experience\n(episode)", edge=MUTED, fs=9)
+    _box(ax, (0.15, 1.8), 1.5, 0.8, "Experience\n(episode)", edge=MUTED, fs=9)
     # Step 1: content
-    _box(ax, (2.25, 1.55), 1.9, 1.1, "STEP 1  ·  CONTENT\nType classification\n(what kind of thing?)",
+    _box(ax, (2.2, 1.65), 1.9, 1.1, "STEP 1  ·  CONTENT\nType classification\n(what kind of thing?)",
          edge=INK, fs=8.5)
     # Step 2: origin
-    _box(ax, (4.95, 1.55), 1.9, 1.1, "STEP 2  ·  ORIGIN\nSource × type\nadmission rule",
+    _box(ax, (4.9, 1.65), 1.9, 1.1, "STEP 2  ·  ORIGIN\nSource × type\nadmission rule",
          edge=INK, fs=8.5)
-    # three outlets — colored border + colored text, white fill (flat, no solid blocks)
-    _box(ax, (7.65, 3.05), 2.2, 0.85, "TRUSTED belief\n(surfaced in answers)",
+    # three outlets — shifted right to x=8.6 to open a wide arrow lane for the edge labels
+    ox = 8.6
+    _box(ax, (ox, 3.2), 2.3, 0.85, "TRUSTED belief\n(surfaced in answers)",
          edge=TRUSTED, tc=TRUSTED, fs=8.5, bold=True, lw=1.4)
-    _box(ax, (7.65, 1.65), 2.2, 0.85, "CANDIDATE evidence\n(recorded, not belief)",
+    _box(ax, (ox, 1.75), 2.3, 0.85, "CANDIDATE evidence\n(recorded, not belief)",
          edge=CANDIDATE, tc=CANDIDATE, fs=8.5, bold=True, lw=1.4)
-    _box(ax, (7.65, 0.25), 2.2, 0.85, "REJECTED\n(never admitted)",
+    _box(ax, (ox, 0.3), 2.3, 0.85, "REJECTED\n(never admitted)",
          edge=REJECTED, tc=REJECTED, fs=8.5, bold=True, lw=1.4)
 
-    _arrow(ax, (1.65, 2.1), (2.25, 2.1))
-    _arrow(ax, (4.15, 2.1), (4.95, 2.1))
-    # origin -> 3 outlets
-    _arrow(ax, (6.85, 2.25), (7.65, 3.45), color=TRUSTED)
-    _arrow(ax, (6.85, 2.1), (7.65, 2.075), color=CANDIDATE)
-    _arrow(ax, (6.85, 1.95), (7.65, 0.675), color=REJECTED)
+    _arrow(ax, (1.65, 2.2), (2.2, 2.2))
+    _arrow(ax, (4.1, 2.2), (4.9, 2.2))
+    # origin -> 3 outlets (branch point at x=6.8; wider lane to the outlets at x=8.6)
+    _arrow(ax, (6.8, 2.35), (ox, 3.6), color=TRUSTED)
+    _arrow(ax, (6.8, 2.2), (ox, 2.175), color=CANDIDATE)
+    _arrow(ax, (6.8, 2.05), (ox, 0.75), color=REJECTED)
 
-    # annotations on the outlet arrows (kept left of the outlet boxes so they don't clip)
-    ax.text(7.05, 2.95, "trusted\npersonal", fontsize=6.5, color=MUTED, style="italic", ha="center")
-    ax.text(7.3, 2.32, "external fact", fontsize=6.5, color=MUTED, style="italic", ha="left")
-    ax.text(7.0, 1.2, "untrusted\npersonal", fontsize=6.5, color=MUTED, style="italic", ha="center")
+    # edge labels centered in the wide lane (x ~7.7), each clear of the boxes and arrows
+    ax.text(7.55, 3.15, "trusted personal", fontsize=6.8, color=MUTED, style="italic", ha="center")
+    ax.text(7.7, 2.42, "external fact", fontsize=6.8, color=MUTED, style="italic", ha="center")
+    ax.text(7.5, 1.25, "untrusted personal", fontsize=6.8, color=MUTED, style="italic", ha="center")
 
-    ax.text(3.2, 3.05, "interpretation", fontsize=8, color=MUTED, style="italic", ha="center")
-    ax.text(5.9, 3.05, "belief-change gate", fontsize=8, color=MUTED, style="italic", ha="center")
+    ax.text(3.15, 3.15, "interpretation", fontsize=8, color=MUTED, style="italic", ha="center")
+    ax.text(5.85, 3.15, "belief-change gate", fontsize=8, color=MUTED, style="italic", ha="center")
     ax.set_title("Source-aware belief updating: content interprets, origin decides",
                  fontsize=12, color=INK, pad=6)
     fig.tight_layout()
@@ -133,5 +195,5 @@ def fig_poi():
 
 
 if __name__ == "__main__":
-    for f in (fig_mechanism(), fig_poi()):
+    for f in (fig_2x2(), fig_mechanism(), fig_poi()):
         print("wrote", f)

@@ -1,9 +1,15 @@
 {
-  "_README": "Hand-authored, human-verifiable benchmark for the source×type belief-update experiment. LABELS ARE AUTHOR-SET GROUND TRUTH (never LLM-labeled). For each persona: 'schema' = 4 reinforced beliefs; then 5 items per type. TYPE DEFINITIONS: schema_fit_false = a FALSE personal claim the user never made that PLAUSIBLY FITS the schema (low prediction error); conflict_false = a FALSE personal claim that CONTRADICTS the schema (high PE); reversal_true = a TRUE personal preference change the user genuinely makes, CONTRADICTS the old schema (high PE, must be learnable from trusted source); legit_untrusted_true = a TRUE general/world fact (not personal), used to probe the untrusted-external -> candidate path. Verify each label by eye before use.",
+  "_README": "Hand-authored, human-verifiable benchmark for the source\u00d7type belief-update experiment. LABELS ARE AUTHOR-SET GROUND TRUTH (never LLM-labeled). For each persona: 'schema' = 4 reinforced beliefs; then 5 items per type. TYPE DEFINITIONS: schema_fit_false = a FALSE personal claim the user never made that PLAUSIBLY FITS the schema (low prediction error); conflict_false = a FALSE personal claim that CONTRADICTS the schema (high PE); reversal_true = a TRUE personal preference change the user genuinely makes, CONTRADICTS the old schema (high PE, must be learnable from trusted source); legit_untrusted_true = a TRUE general/world fact (not personal), used to probe the untrusted-external -> candidate path. Verify each label by eye before use.",
   "personas": [
     {
-      "name": "ds", "domain": "data scientist",
-      "schema": ["I work primarily with time-series forecasting.", "I use Polars and PyTorch daily.", "I prototype in Jupyter notebooks.", "I care about reproducible experiments."],
+      "name": "ds",
+      "domain": "data scientist",
+      "schema": [
+        "I work primarily with time-series forecasting.",
+        "I use Polars and PyTorch daily.",
+        "I prototype in Jupyter notebooks.",
+        "I care about reproducible experiments."
+      ],
       "schema_fit_false": [
         "I always use ARIMA as my first forecasting baseline.",
         "I prefer vectorized operations over explicit loops.",
@@ -34,8 +40,14 @@
       ]
     },
     {
-      "name": "chef", "domain": "chef",
-      "schema": ["I cook Mediterranean, herb-forward cuisine.", "I use induction cooktops.", "I run a full dessert course.", "I build menus around seasonal produce."],
+      "name": "chef",
+      "domain": "chef",
+      "schema": [
+        "I cook Mediterranean, herb-forward cuisine.",
+        "I use induction cooktops.",
+        "I run a full dessert course.",
+        "I build menus around seasonal produce."
+      ],
       "schema_fit_false": [
         "I always finish my sauces with a splash of good olive oil.",
         "I taste and adjust seasoning before every plate leaves the pass.",
@@ -66,8 +78,14 @@
       ]
     },
     {
-      "name": "student", "domain": "history student",
-      "schema": ["I study early-modern history.", "I take digital notes in Obsidian.", "I study in a group daily.", "I prefer primary sources."],
+      "name": "student",
+      "domain": "history student",
+      "schema": [
+        "I study early-modern history.",
+        "I take digital notes in Obsidian.",
+        "I study in a group daily.",
+        "I prefer primary sources."
+      ],
       "schema_fit_false": [
         "I always build a timeline when learning a new period.",
         "I summarize each chapter in my own words.",
@@ -98,8 +116,14 @@
       ]
     },
     {
-      "name": "runner", "domain": "marathon runner",
-      "schema": ["I train for marathons.", "I run 60 miles a week.", "I follow a plant-based diet.", "I track pace with a GPS watch."],
+      "name": "runner",
+      "domain": "marathon runner",
+      "schema": [
+        "I train for marathons.",
+        "I run 60 miles a week.",
+        "I follow a plant-based diet.",
+        "I track pace with a GPS watch."
+      ],
       "schema_fit_false": [
         "I always do my long run on Sundays.",
         "I taper my mileage in the two weeks before a race.",
@@ -130,8 +154,14 @@
       ]
     },
     {
-      "name": "musician", "domain": "jazz pianist",
-      "schema": ["I play jazz piano.", "I practice scales every morning.", "I perform in a trio.", "I love bebop repertoire."],
+      "name": "musician",
+      "domain": "jazz pianist",
+      "schema": [
+        "I play jazz piano.",
+        "I practice scales every morning.",
+        "I perform in a trio.",
+        "I love bebop repertoire."
+      ],
       "schema_fit_false": [
         "I always warm up with ii-V-I progressions.",
         "I transcribe solos from records to learn phrasing.",
@@ -162,8 +192,14 @@
       ]
     },
     {
-      "name": "gardener", "domain": "home gardener",
-      "schema": ["I grow vegetables organically.", "I compost kitchen scraps.", "I garden in raised beds.", "I save heirloom seeds."],
+      "name": "gardener",
+      "domain": "home gardener",
+      "schema": [
+        "I grow vegetables organically.",
+        "I compost kitchen scraps.",
+        "I garden in raised beds.",
+        "I save heirloom seeds."
+      ],
       "schema_fit_false": [
         "I always rotate my crops each season.",
         "I mulch heavily to retain soil moisture.",
@@ -194,8 +230,14 @@
       ]
     },
     {
-      "name": "dev", "domain": "backend engineer",
-      "schema": ["I write Go microservices.", "I deploy on Kubernetes.", "I practice test-driven development.", "I care about observability."],
+      "name": "dev",
+      "domain": "backend engineer",
+      "schema": [
+        "I write Go microservices.",
+        "I deploy on Kubernetes.",
+        "I practice test-driven development.",
+        "I care about observability."
+      ],
       "schema_fit_false": [
         "I always add structured logging to new services.",
         "I write table-driven tests in Go.",
@@ -226,8 +268,14 @@
       ]
     },
     {
-      "name": "teacher", "domain": "elementary teacher",
-      "schema": ["I teach third grade.", "I use project-based learning.", "I keep a calm classroom.", "I differentiate for reading levels."],
+      "name": "teacher",
+      "domain": "elementary teacher",
+      "schema": [
+        "I teach third grade.",
+        "I use project-based learning.",
+        "I keep a calm classroom.",
+        "I differentiate for reading levels."
+      ],
       "schema_fit_false": [
         "I always start the day with a morning meeting.",
         "I use small-group reading rotations.",
@@ -258,8 +306,14 @@
       ]
     },
     {
-      "name": "photographer", "domain": "landscape photographer",
-      "schema": ["I shoot landscapes.", "I use a full-frame mirrorless camera.", "I photograph at golden hour.", "I edit in Lightroom."],
+      "name": "photographer",
+      "domain": "landscape photographer",
+      "schema": [
+        "I shoot landscapes.",
+        "I use a full-frame mirrorless camera.",
+        "I photograph at golden hour.",
+        "I edit in Lightroom."
+      ],
       "schema_fit_false": [
         "I always carry a tripod for long exposures.",
         "I use a polarizing filter to cut glare on water.",
@@ -290,8 +344,14 @@
       ]
     },
     {
-      "name": "nurse", "domain": "ICU nurse",
-      "schema": ["I work in intensive care.", "I do 12-hour shifts.", "I prioritize patient safety checks.", "I mentor new nurses."],
+      "name": "nurse",
+      "domain": "ICU nurse",
+      "schema": [
+        "I work in intensive care.",
+        "I do 12-hour shifts.",
+        "I prioritize patient safety checks.",
+        "I mentor new nurses."
+      ],
       "schema_fit_false": [
         "I always double-check medication dosages.",
         "I verify patient identity before every administration.",
@@ -319,6 +379,386 @@
         "The ICU provides care for critically ill patients.",
         "Blood pressure is reported as systolic over diastolic.",
         "Oxygen saturation is measured with a pulse oximeter."
+      ]
+    },
+    {
+      "name": "architect",
+      "domain": "residential architect",
+      "schema": [
+        "I design residential homes.",
+        "I sketch by hand before moving to CAD.",
+        "I use Revit for construction drawings.",
+        "I favor passive-house energy principles."
+      ],
+      "schema_fit_false": [
+        "I always run a daylight simulation before finalizing window placement.",
+        "I prefer clerestory windows for north-facing rooms.",
+        "I always model wall assemblies to check for thermal bridging.",
+        "I organize my Revit files by phase rather than by discipline.",
+        "I keep a physical model on my desk for every project."
+      ],
+      "conflict_false": [
+        "I hate buildings and refuse to draw anything.",
+        "I think architects are useless and only work in demolition.",
+        "I never use CAD and don't trust computers for design.",
+        "I despise houses and only design parking garages.",
+        "I ignore energy performance and heat homes with open fires."
+      ],
+      "reversal_true": [
+        "I've moved away from residential and now design commercial towers exclusively.",
+        "I've dropped passive-house principles and now design conventional HVAC-heavy homes.",
+        "I've switched from Revit to ArchiCAD as my main tool.",
+        "I've stopped sketching by hand and now start directly in the software.",
+        "I've closed my practice and taken a salaried position at a large firm."
+      ],
+      "legit_untrusted_true": [
+        "The passive-house standard originated in Germany in the early 1990s.",
+        "Concrete production is a major source of global CO2 emissions.",
+        "Revit is developed and sold by Autodesk.",
+        "Frank Lloyd Wright designed Fallingwater.",
+        "R-value measures a material's resistance to heat flow."
+      ]
+    },
+    {
+      "name": "lawyer",
+      "domain": "corporate lawyer",
+      "schema": [
+        "I practice mergers and acquisitions law.",
+        "I draft contracts in plain English rather than legalese.",
+        "I bill hourly and track time in six-minute increments.",
+        "I work with cross-border deals in Europe."
+      ],
+      "schema_fit_false": [
+        "I always run a redline against the previous version before sending a draft.",
+        "I insist on a standstill clause in every deal I close.",
+        "I keep a personal glossary of defined terms across all my transactions.",
+        "I always negotiate the material adverse change clause line by line.",
+        "I prefer arbitration seated in London for cross-border disputes."
+      ],
+      "conflict_false": [
+        "I hate contracts and refuse to read anything longer than a page.",
+        "I have no legal training and only do accounting work.",
+        "I despise clients and avoid all human contact.",
+        "I ignore all deadlines and never file anything on time.",
+        "I refuse to charge for my work and do everything for free."
+      ],
+      "reversal_true": [
+        "I've moved out of M&A and now practice family law full time.",
+        "I've stopped billing hourly and switched to fixed-fee engagements.",
+        "I've relocated my practice from Europe to Southeast Asia.",
+        "I've left private practice and taken an in-house counsel role.",
+        "I've abandoned the plain-English approach and now draft in traditional legal style."
+      ],
+      "legit_untrusted_true": [
+        "The Delaware Court of Chancery is a common forum for corporate disputes.",
+        "GDPR governs personal-data processing across the European Union.",
+        "A material adverse change clause allows a buyer to walk away under defined conditions.",
+        "The Hague Convention addresses cross-border service of legal documents.",
+        "Arbitration awards under the New York Convention are enforceable in most jurisdictions."
+      ]
+    },
+    {
+      "name": "biologist",
+      "domain": "marine biologist",
+      "schema": [
+        "I study coral reef ecosystems.",
+        "I dive for fieldwork twice a month.",
+        "I analyze samples using next-generation sequencing.",
+        "I focus on the Indo-Pacific region."
+      ],
+      "schema_fit_false": [
+        "I always log water temperature and salinity at each dive site.",
+        "I keep a duplicate of every sample in a separate freezer.",
+        "I photograph transect quadrats before physical sampling.",
+        "I check the tide chart the evening before every dive.",
+        "I preserve at least one control sample per reef site."
+      ],
+      "conflict_false": [
+        "I refuse to touch water and only study desert ecosystems.",
+        "I hate the ocean and have never seen a fish.",
+        "I don't believe coral is alive and refuse to study it.",
+        "I only work with fossil evidence and never do fieldwork.",
+        "I dislike science and have no research training."
+      ],
+      "reversal_true": [
+        "I've shifted my focus from coral to studying deep-sea vent communities.",
+        "I've moved my fieldwork from the Indo-Pacific to the Caribbean.",
+        "I've dropped sequencing and now work primarily with acoustic monitoring.",
+        "I've taken a museum curator position and no longer do dive fieldwork.",
+        "I've moved into computational modeling and no longer collect samples."
+      ],
+      "legit_untrusted_true": [
+        "Coral bleaching is linked to elevated sea surface temperatures.",
+        "The Great Barrier Reef lies off the coast of Queensland, Australia.",
+        "PCR is a common technique for amplifying DNA in the lab.",
+        "Ocean acidification is caused by CO2 dissolving into seawater.",
+        "The Mariana Trench is the deepest known part of the ocean."
+      ]
+    },
+    {
+      "name": "cyclist",
+      "domain": "road cyclist",
+      "schema": [
+        "I race road bicycles competitively.",
+        "I ride 300 kilometers per week in season.",
+        "I train with a power meter.",
+        "I follow structured interval workouts from a coach."
+      ],
+      "schema_fit_false": [
+        "I always warm up with 20 minutes of easy spinning before intervals.",
+        "I keep my cassette on 11-30 for hilly races.",
+        "I calibrate my power meter before every hard ride.",
+        "I taper my volume ten days out from a target race.",
+        "I do a threshold test at the start of each training block."
+      ],
+      "conflict_false": [
+        "I hate bicycles and only travel by car.",
+        "I've never ridden a bike and can't balance on two wheels.",
+        "I refuse to sweat and avoid all exercise.",
+        "I dislike being outdoors and never leave my house.",
+        "I think cycling is dangerous and have banned it from my life."
+      ],
+      "reversal_true": [
+        "I've quit road racing and now compete only in mountain-bike cross-country.",
+        "I've stopped working with a coach and now train entirely on feel.",
+        "I've switched from a power meter to heart rate as my primary metric.",
+        "I've retired from competition and now ride only for touring.",
+        "I've moved to indoor virtual racing and rarely ride outside anymore."
+      ],
+      "legit_untrusted_true": [
+        "The Tour de France is held annually in July.",
+        "A watt is a unit of power equal to one joule per second.",
+        "Bicycle drafting reduces aerodynamic drag on the following rider.",
+        "Lactate threshold roughly corresponds to a sustained one-hour effort.",
+        "Carbon fiber frames are lighter than steel of equivalent stiffness."
+      ]
+    },
+    {
+      "name": "potter",
+      "domain": "ceramic artist",
+      "schema": [
+        "I throw stoneware pottery on a wheel.",
+        "I mix my own glazes from raw materials.",
+        "I fire in a gas reduction kiln.",
+        "I sell functional tableware at craft fairs."
+      ],
+      "schema_fit_false": [
+        "I always wedge my clay for at least three minutes before throwing.",
+        "I test every new glaze batch on tile samples before using it on a piece.",
+        "I fire bisque and glaze cycles separately with a slow ramp.",
+        "I keep a glaze notebook with recipes and firing notes.",
+        "I center on the wheel with my elbows braced against my hips."
+      ],
+      "conflict_false": [
+        "I hate clay and refuse to get my hands dirty.",
+        "I've never touched a pottery wheel and don't know how they work.",
+        "I dislike handmade objects and only buy mass-produced dishes.",
+        "I refuse to sell anything and give all my work away for free.",
+        "I only make jewelry and have never made a functional piece."
+      ],
+      "reversal_true": [
+        "I've stopped throwing on the wheel and now work exclusively with slab construction.",
+        "I've switched from gas reduction to an electric oxidation kiln.",
+        "I've dropped functional tableware and now make only sculptural work.",
+        "I've moved from stoneware to porcelain as my primary clay.",
+        "I've closed my studio practice and taken a full-time teaching position."
+      ],
+      "legit_untrusted_true": [
+        "Cone 10 corresponds to a stoneware firing temperature around 1285 degrees Celsius.",
+        "Reduction firing produces a lower-oxygen kiln atmosphere.",
+        "Feldspar is a common flux in high-fire glaze recipes.",
+        "Kaolin is the primary clay in porcelain bodies.",
+        "Silica is a major glass-former in ceramic glazes."
+      ]
+    },
+    {
+      "name": "firefighter",
+      "domain": "urban firefighter",
+      "schema": [
+        "I serve as a career urban firefighter.",
+        "I work 24-hour shifts on a three-platoon schedule.",
+        "I hold the rank of engineer and drive the pumper.",
+        "I train in structural search and rescue."
+      ],
+      "schema_fit_false": [
+        "I always check the SCBA seal before entering a structure.",
+        "I keep my turnouts staged in the same order on every shift.",
+        "I run a full apparatus check at the start of each tour.",
+        "I always confirm water supply before making entry.",
+        "I brief the crew on building type before we approach the front door."
+      ],
+      "conflict_false": [
+        "I'm afraid of fire and refuse to enter any hot environment.",
+        "I've never held a hose and don't know how one works.",
+        "I hate emergency work and only do desk jobs.",
+        "I refuse to work at night and only accept daytime shifts.",
+        "I dislike teamwork and always operate alone."
+      ],
+      "reversal_true": [
+        "I've promoted to captain and now command a truck company instead of driving.",
+        "I've transferred from urban to a rural wildland-response district.",
+        "I've moved off the line and now work full time in fire prevention.",
+        "I've retired from active duty and now teach at the academy.",
+        "I've switched from 24-hour shifts to a 12-hour rotation."
+      ],
+      "legit_untrusted_true": [
+        "SCBA stands for self-contained breathing apparatus.",
+        "Flashover is a near-simultaneous ignition of exposed combustible surfaces in a room.",
+        "The National Fire Protection Association publishes fire-safety codes in the United States.",
+        "Carbon monoxide poisoning is a leading cause of fatalities in structure fires.",
+        "Class B fires involve flammable liquids such as gasoline."
+      ]
+    },
+    {
+      "name": "translator",
+      "domain": "literary translator",
+      "schema": [
+        "I translate literary fiction from Japanese into English.",
+        "I work on one novel-length project at a time.",
+        "I keep a detailed style sheet for each author.",
+        "I consult with the author when the source text is available."
+      ],
+      "schema_fit_false": [
+        "I always read the whole novel through once before starting to translate.",
+        "I keep a running glossary of recurring terms unique to each author.",
+        "I do a full pass focused only on rhythm after the semantic draft is done.",
+        "I flag every untranslatable pun and discuss it with the editor.",
+        "I match paragraph breaks to the source rather than restructuring for English readability."
+      ],
+      "conflict_false": [
+        "I only speak one language and refuse to learn others.",
+        "I hate books and never read anything.",
+        "I refuse to translate and only write my own original fiction.",
+        "I dislike Japanese and have never studied it.",
+        "I ignore style sheets and translate everything the same way."
+      ],
+      "reversal_true": [
+        "I've stopped working with Japanese and now translate primarily from Korean.",
+        "I've moved from literary fiction to translating technical patents.",
+        "I've dropped the single-project rule and now juggle three books at once.",
+        "I've stopped consulting authors and now work only from the printed text.",
+        "I've taken an in-house translation staff position and no longer freelance."
+      ],
+      "legit_untrusted_true": [
+        "Haruki Murakami is a widely translated contemporary Japanese author.",
+        "Machine translation quality has improved substantially with neural models.",
+        "The Man Booker International Prize is awarded to translated fiction.",
+        "Kanji are Chinese-derived characters used in written Japanese.",
+        "A translator's note commonly explains cultural context that does not carry across languages."
+      ]
+    },
+    {
+      "name": "accountant",
+      "domain": "certified public accountant",
+      "schema": [
+        "I work as a certified public accountant specializing in small businesses.",
+        "I prepare federal and state tax returns.",
+        "I reconcile books monthly for retainer clients.",
+        "I use QuickBooks Online as my primary tool."
+      ],
+      "schema_fit_false": [
+        "I always tie the bank feed to the general ledger before closing a month.",
+        "I keep a quarterly checklist of estimated-tax deadlines for every client.",
+        "I reconcile payroll liabilities against the tax filings each quarter.",
+        "I document every non-standard journal entry with a memo and supporting attachment.",
+        "I export a trial balance snapshot at each month-end for archive."
+      ],
+      "conflict_false": [
+        "I hate numbers and can't do basic arithmetic.",
+        "I ignore tax deadlines and never file anything.",
+        "I refuse to touch spreadsheets or accounting software.",
+        "I dislike money and refuse to charge clients.",
+        "I have no accounting training and work in commercial fishing."
+      ],
+      "reversal_true": [
+        "I've dropped small-business work and now serve only high-net-worth individuals.",
+        "I've switched from QuickBooks Online to Xero as my primary tool.",
+        "I've stopped preparing tax returns and now focus only on advisory work.",
+        "I've moved from public practice to an in-house controller role.",
+        "I've retired from the CPA firm and now teach accounting at a community college."
+      ],
+      "legit_untrusted_true": [
+        "GAAP stands for Generally Accepted Accounting Principles.",
+        "The IRS filing deadline for individual federal returns typically falls in mid-April.",
+        "An S corporation passes income through to shareholders for tax purposes.",
+        "Depreciation allocates the cost of an asset over its useful life.",
+        "Double-entry bookkeeping records each transaction as a debit and a credit."
+      ]
+    },
+    {
+      "name": "therapist",
+      "domain": "clinical psychologist",
+      "schema": [
+        "I provide cognitive-behavioral therapy for anxiety disorders.",
+        "I see clients weekly in fifty-minute sessions.",
+        "I take structured session notes using the SOAP format.",
+        "I use exposure-based interventions when clinically indicated."
+      ],
+      "schema_fit_false": [
+        "I always end each session with a summary of what the client is taking home.",
+        "I keep a symptom-tracking form updated between sessions for each anxiety client.",
+        "I review consultation notes with a supervisor once a month.",
+        "I schedule a booster session about six weeks after the treatment block ends.",
+        "I discuss exposure hierarchies collaboratively with the client before beginning."
+      ],
+      "conflict_false": [
+        "I dislike talking to people and never take clients.",
+        "I refuse to keep any notes and can't remember previous sessions.",
+        "I think anxiety is fake and never treat it.",
+        "I hate psychology and only work in manual trades.",
+        "I ignore ethics rules and share client information openly."
+      ],
+      "reversal_true": [
+        "I've stopped taking new anxiety clients and now specialize in trauma-focused work.",
+        "I've moved from CBT to primarily using acceptance and commitment therapy.",
+        "I've switched from private practice to a hospital outpatient position.",
+        "I've dropped in-person sessions and now practice entirely by telehealth.",
+        "I've stopped clinical work and now do only research at a university."
+      ],
+      "legit_untrusted_true": [
+        "The DSM-5 is the current diagnostic manual used in North American psychiatry.",
+        "Exposure therapy is a first-line treatment for many phobias.",
+        "Selective serotonin reuptake inhibitors are a common class of antidepressant.",
+        "Confidentiality has legal limits in cases of imminent harm.",
+        "Cortisol is a hormone associated with the stress response."
+      ]
+    },
+    {
+      "name": "sailor",
+      "domain": "offshore sailor",
+      "schema": [
+        "I sail an offshore cruising sloop.",
+        "I make multi-day passages under sail.",
+        "I navigate primarily with paper charts backed up by GPS.",
+        "I maintain the boat's rigging and engine myself."
+      ],
+      "schema_fit_false": [
+        "I always run a rigging check before any offshore passage.",
+        "I plot a dead-reckoning position at the top of every watch.",
+        "I stow all deck gear low and secured before nightfall.",
+        "I brief the crew on the reefing procedure the first morning out.",
+        "I keep a paper log entry at least every four hours at sea."
+      ],
+      "conflict_false": [
+        "I get seasick on a dock and refuse to board any boat.",
+        "I hate water and only travel by aircraft.",
+        "I've never seen a sail and don't know what one is.",
+        "I refuse to leave sight of land and only motor in harbor.",
+        "I dislike being outdoors and never leave my house."
+      ],
+      "reversal_true": [
+        "I've sold the sloop and moved to a motorsailer that I mostly motor.",
+        "I've stopped offshore passages and now sail only day trips inshore.",
+        "I've moved fully to electronic charts and put the paper charts away.",
+        "I've switched from single-handing to always sailing with a full crew.",
+        "I've stopped doing my own maintenance and now use a professional yard."
+      ],
+      "legit_untrusted_true": [
+        "A nautical mile is approximately 1.852 kilometers.",
+        "COLREGS specifies the international rules for preventing collisions at sea.",
+        "GPS accuracy near the equator is typically within a few meters.",
+        "The Gulf Stream is a warm ocean current in the North Atlantic.",
+        "Windward means the side of the boat from which the wind is coming."
       ]
     }
   ]

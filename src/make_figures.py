@@ -1,4 +1,4 @@
-"""Generate publication figures from the source-aware ablation (results/prov_final_n50.json).
+"""Generate publication figures from the source-aware ablation (results/prov_ablation_sonnet45.json).
 
 Deterministic: reads the saved result, writes PNGs. Re-run any time the ablation is re-run.
 Palette = Okabe-Ito (colorblind-safe categorical). Marks thin, direct labels, legend present,
@@ -15,8 +15,15 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 from matplotlib.patches import Patch
 
+# Match the paper's serif body font (Times / Computer Modern look) so figures don't read as slides.
+plt.rcParams.update({
+    "font.family": "serif",
+    "font.serif": ["Times New Roman", "DejaVu Serif", "STIXGeneral"],
+    "mathtext.fontset": "stix",
+})
+
 _DIR = os.path.dirname(os.path.abspath(__file__))
-D = json.load(open(os.path.join(_DIR, "..", "results", "prov_final_n50.json")))["result"]
+D = json.load(open(os.path.join(_DIR, "..", "results", "prov_ablation_sonnet45.json")))["result"]
 S = D["summary"]
 PE = D["pe_validation"]
 
@@ -61,17 +68,20 @@ def fig_core():
         t = S[TARGET][ag]["trusted"]
         fracs.append(t["frac"] * 100)
         lo, hi = t["ci"]
-        los.append((t["frac"] - lo) * 100)
-        his.append((hi - t["frac"]) * 100)
+        los.append(max(0.0, (t["frac"] - lo) * 100))
+        his.append(max(0.0, (hi - t["frac"]) * 100))
     x = range(len(AGENTS))
     # source-blind content methods in vermillion (fail), source-aware in blue (resolves)
     colors = [OI["vermillion"]] * 4 + [OI["blue"]]
     bars = ax.bar(x, fracs, width=0.62, color=colors, zorder=3)
     ax.errorbar(x, fracs, yerr=[los, his], fmt="none", ecolor=INK, elinewidth=1.4,
                 capsize=4, zorder=4)
-    # value labels ABOVE the upper CI whisker (never inside the bar / over the cap)
+    # value labels ABOVE the upper CI whisker (never inside the bar / over the cap).
+    # For a 0% bar the label sits at y=0 by default which reads as a rendering artifact;
+    # lift it to a visible height so the 0% contrast with the ~100% bars is unmissable.
     for xi, f, hi in zip(x, fracs, his):
-        ax.text(xi, f + hi + 3, f"{f:.0f}%", ha="center", va="bottom",
+        y_label = max(f + hi + 3, 8)
+        ax.text(xi, y_label, f"{f:.0f}%", ha="center", va="bottom",
                 color=INK, fontsize=10, fontweight="bold")
     ax.set_xticks(list(x))
     ax.set_xticklabels([AGENT_LABEL[a] for a in AGENTS], fontsize=9)
@@ -98,25 +108,31 @@ def fig_core():
 # FIG 2 — full composition: 4 condition panels, 5 stacked bars each
 # ---------------------------------------------------------------------------
 def fig_dist():
-    fig, axes = plt.subplots(1, 4, figsize=(11, 3.8), sharey=True)
+    # schema agents only (the causal comparison); RAG/Reflection reference points live in fig_core.
+    AG = ["schema_no_prov", "schema_conf", "schema_prov"]
+    # derive N from the data (total outcomes per cell) so the axis is never hardcoded
+    N = sum(S[TARGET]["schema_no_prov"][o]["k"] for o in ("trusted", "candidate", "absent"))
+    half = N // 2
+    fig, axes2d = plt.subplots(2, 2, figsize=(9.5, 5.4), sharey=True)
+    axes = axes2d.flatten()
     order = ["absent", "candidate", "trusted"]  # bottom->top
     for ax, (ck, title) in zip(axes, CONDS.items()):
-        y = range(len(AGENTS))
-        left = [0] * len(AGENTS)
+        y = range(len(AG))
+        left = [0] * len(AG)
         for oc in order:
-            vals = [S[ck][ag][oc]["k"] for ag in AGENTS]
-            ax.barh(y, vals, left=left, color=OUTCOME_COLOR[oc], height=0.66, zorder=3)
+            vals = [S[ck][ag][oc]["k"] for ag in AG]
+            ax.barh(y, vals, left=left, color=OUTCOME_COLOR[oc], height=0.6, zorder=3)
             left = [l + v for l, v in zip(left, vals)]
         ax.set_yticks(list(y))
-        ax.set_yticklabels([AGENT_LABEL[a].replace("\n", " ") for a in AGENTS], fontsize=8)
+        ax.set_yticklabels([AGENT_LABEL[a].replace("\n", " ") for a in AG], fontsize=9)
         ax.invert_yaxis()
-        ax.set_xlim(0, 50)
-        ax.set_xticks([0, 25, 50])
+        ax.set_xlim(0, N)
+        ax.set_xticks([0, half, N])
         ax.set_title(title, fontsize=8.5, color=INK)
         ax.grid(axis="x", color="#EEEEEE", zorder=0)
         _style(ax)
     axes[0].set_ylabel("")
-    fig.supxlabel("count out of n=50", fontsize=9, color=INK, y=0.02)
+    fig.supxlabel(f"count out of n={N}", fontsize=9, color=INK, y=0.02)
     handles = [Patch(color=OUTCOME_COLOR[o], label=o) for o in ["trusted", "candidate", "absent"]]
     fig.legend(handles=handles, frameon=False, fontsize=9, ncol=3,
                loc="upper center", bbox_to_anchor=(0.5, 1.02))
