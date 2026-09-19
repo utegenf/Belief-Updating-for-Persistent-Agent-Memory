@@ -18,11 +18,14 @@ The following are the v0 protocol contracts. Implementations are intentionally o
 ```python
 from typing import Any, Iterable, Mapping, Protocol, Sequence
 
-from belief_memory.models import AdmissionDecision, Belief, CandidateEvidence, Experience, FunctionalType, Source
+from sourced_memory.models import AdmissionDecision, Belief, CandidateEvidence, Experience, FunctionalType, Source
+from sourced_memory.router import RouteResult
 
 class Router(Protocol):
-    """Interpret content without access to provenance."""
-    def route(self, content: str) -> FunctionalType: ...
+    """Interpret content without access to provenance. Structurally, this
+    signature takes a ``str`` — a router implementation cannot see the item's
+    source even by mistake."""
+    def route(self, content: str) -> RouteResult: ...
 
 class Policy(Protocol):
     """Map source + functional type to an admission decision."""
@@ -50,7 +53,7 @@ def consolidate(buffer: Iterable[Experience], *, policy: Policy, router: Router)
 
 ### `Memory`
 
-The high-level integration object owns a buffer and a backend. `observe()` records an experience and returns an `ObserveResult`; it does **not** call an LLM router, mutate persistent beliefs, or consolidate automatically. `consolidate()` is an explicit operation.
+The high-level integration object owns a buffer and a backend. `observe()` records an experience and returns the buffered `Experience`; it does **not** call the router, mutate persistent beliefs, or consolidate automatically. `consolidate()` is an explicit operation, and reader methods (`beliefs()`, `candidates()`, `episodic()`, `decisions()`) return the current state without triggering consolidation. `pending()` reports how many buffered experiences have not yet been consolidated.
 
 ### Router implementations
 

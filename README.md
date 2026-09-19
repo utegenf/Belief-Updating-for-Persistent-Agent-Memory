@@ -9,7 +9,7 @@ A lifelong agent must decide which experiences may enter its persistent world mo
 The v0 API is designed to be small enough to sit in front of an existing agent-memory store:
 
 ```python
-from belief_memory import SourceAwareMemory, SourceTypePolicy
+from sourced_memory import SourceAwareMemory, SourceTypePolicy
 
 memory = SourceAwareMemory(
     trusted_sources={"user"},
@@ -84,7 +84,7 @@ These are deliberate scope boundaries, not missing features. Later versions can 
 ## Repository layout
 
 ```text
-src/belief_memory/   reusable library
+src/sourced_memory/   reusable library
 src/research/        paper/reproducibility implementation (target layout)
 examples/             integration examples
 tests/                library and conformance tests

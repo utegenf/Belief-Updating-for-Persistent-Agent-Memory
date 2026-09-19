@@ -1,5 +1,5 @@
-from belief_memory import AdmissionDecision, FunctionalType, SourceTypePolicy
-from belief_memory.models import Source
+from sourced_memory import AdmissionDecision, FunctionalType, SourceTypePolicy
+from sourced_memory.models import Source
 
 def test_reference_policy_trusts_personal_claims_from_trusted_source():
     assert SourceTypePolicy.reference().decide(Source("user", trusted=True), FunctionalType.PERSONAL_PREFERENCE) is AdmissionDecision.BELIEF

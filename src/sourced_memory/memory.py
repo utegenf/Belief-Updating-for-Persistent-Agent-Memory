@@ -56,7 +56,7 @@ class SourceAwareMemory:
         for experience in self._experiences:
             if experience.id in processed:
                 continue
-            route = self.router.route(experience)
+            route = self.router.route(experience.content)
             decision = (self.policy.decide(experience.source, route.functional_type)
                         if route.supported else AdmissionDecision.REJECT)
             self._apply(experience, route, decision)
@@ -84,20 +84,25 @@ class SourceAwareMemory:
             self._episodic.append(experience)
 
     def beliefs(self) -> list[Belief]:
-        self.consolidate()
+        """Return currently admitted beliefs. Call consolidate() to advance state."""
         return list(self._beliefs)
 
     def candidates(self) -> list[CandidateEvidence]:
-        self.consolidate()
+        """Return currently held candidate evidence. Call consolidate() to advance state."""
         return list(self._candidates)
 
     def episodic(self) -> list[Experience]:
-        self.consolidate()
+        """Return episodic memories. Call consolidate() to advance state."""
         return list(self._episodic)
 
     def decisions(self) -> list[AdmissionRecord]:
-        self.consolidate()
+        """Return recorded admission decisions. Call consolidate() to advance state."""
         return list(self._decisions)
+
+    def pending(self) -> int:
+        """Number of buffered experiences that have not yet been consolidated."""
+        processed = {x.experience_id for x in self._decisions}
+        return sum(1 for x in self._experiences if x.id not in processed)
 
     def clear(self) -> None:
         self._experiences.clear()

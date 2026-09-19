@@ -1,4 +1,4 @@
-from belief_memory import AdmissionDecision, FunctionalType, SourceAwareMemory, SourceTypePolicy
+from sourced_memory import AdmissionDecision, FunctionalType, SourceAwareMemory, SourceTypePolicy
 
 policy = SourceTypePolicy({
     ("user", FunctionalType.PERSONAL_PREFERENCE): AdmissionDecision.BELIEF,

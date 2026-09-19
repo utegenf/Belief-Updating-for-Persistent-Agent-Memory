@@ -1,4 +1,4 @@
-from belief_memory import SourceAwareMemory
+from sourced_memory import SourceAwareMemory
 
 memory = SourceAwareMemory(trusted_sources={"user"})
 
