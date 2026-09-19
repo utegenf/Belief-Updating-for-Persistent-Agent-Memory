@@ -2,72 +2,106 @@
 
 **Source-aware belief updating for persistent LLM-agent memory.**
 
-A lifelong agent must decide which experiences may enter its persistent world model. That
-decision has two irreducible parts: **content** (what kind of thing is this?) and **origin**
-(does this source warrant a belief update?). This project demonstrates a failure mode of
-content-based memory and evaluates a source-aware alternative.
+A lifelong agent must decide which experiences may enter its persistent world model. This project separates two questions: **content** (what kind of thing is this?) and **origin** (does this source warrant a belief update?).
+
+## 5-minute integration
+
+The v0 API is designed to be small enough to sit in front of an existing agent-memory store:
+
+```python
+from belief_memory import SourceAwareMemory, SourceTypePolicy
+
+memory = SourceAwareMemory(
+    trusted_sources={"user"},
+)
+
+memory.observe(
+    "I've started learning Rust.",
+    source="user",
+)
+
+memory.observe(
+    "The user is an expert Rust developer.",
+    source="external_document",
+)
+
+memory.consolidate()
+
+print(memory.beliefs())
+print(memory.candidates())
+```
+
+Consolidation is explicit. Provenance is supplied by the application and is never inferred from content. The core package does not require an LLM provider.
 
 ## The idea
 
-A plausible fabrication that *fits* an agent's existing schema is assimilated as a trusted
-belief, because, on content alone, it is indistinguishable from a genuine update. We call this
-the **Point of Indistinguishability**. Content can tell you *what* a claim is, but not whether it
-should be *allowed to change* your beliefs; that requires knowing the origin.
+A plausible fabrication that fits an agent's existing schema can be content-wise indistinguishable from a genuine personal update. We call this the **Point of Indistinguishability**. Content determines the interpretation of an experience; origin determines whether that experience is allowed to change beliefs.
 
-## What we found
+## Research findings
 
-- **Controlled ablation** (20 personas, `n=100` per condition, deterministic outcome inspection):
-  source-blind and confidence-thresholded memory both assimilate the plausible fabrication in
-  every case; a source-aware policy prevents it. Controls confirm the source-aware gate still
-  *learns* genuine trusted preference reversals (98%) and routes untrusted world facts to a
-  candidate/evidence layer rather than trusting or discarding them.
-- **Cross-family:** the same pattern replicates on a second base-model family (Llama-4-Maverick),
-  indicating the failure is architectural, not model-specific.
-- **External validity:** Mem0, an off-the-shelf memory layer with no source-trust mechanism,
-  assimilates the same fabrication in **50/50** cases, locating the failure in the content-based
-  consolidation *paradigm*, not in a weak in-house baseline.
+- **Controlled ablation** (20 personas, `n=100` per condition, deterministic outcome inspection): source-blind and confidence-thresholded memory assimilate the plausible fabrication in every case; a source-aware policy prevents it. Controls confirm the source-aware gate retains genuine trusted preference reversals in 98% of cases and routes untrusted world facts to a candidate/evidence layer.
+- **Cross-family:** the same pattern replicates on a second base-model family (Llama-4-Maverick), indicating the failure is architectural rather than tied to one model family.
+- **External validity:** the repository includes a Mem0 spot-check as an external anchor; see the research results for the exact evaluated sample and protocol.
+
+## Architecture
+
+```text
+experience
+    │
+    ▼
+Content Router ──► functional type
+    │
+    ▼
+Source × Type Policy ──► belief / candidate / episodic / reject
+    │
+    ▼
+Backend
+```
+
+- **Router:** pluggable. v0 provides an LLM router, a dependency-free rule router, and a null router for pre-typed inputs.
+- **Policy:** configurable source × functional-type admission rules.
+- **Provenance:** application-supplied metadata; never inferred from message text.
+- **Backend:** in-memory in v0, with a `Backend` protocol for application-owned persistence.
+- **Consolidation:** explicit and controllable; never triggered automatically by `observe()`.
+
+See [`docs/architecture.md`](docs/architecture.md) for the protocol contracts and design boundary.
+
+## v0 non-goals
+
+v0 deliberately does **not** ship:
+
+- SQLite or another built-in persistent storage implementation;
+- automatic corroboration or candidate-to-belief promotion;
+- learned multi-tier trust or source reputation;
+- a hosted memory service;
+- non-Python bindings;
+- automatic consolidation;
+- a mandatory LLM dependency;
+- framework-specific integrations as a requirement for the core package.
+
+These are deliberate scope boundaries, not missing features. Later versions can add them when real integration requirements justify the complexity.
 
 ## Repository layout
 
-```
-src/        experiment + figure code
-data/       hand-authored benchmark (personas, schema, injected items; author-set ground truth)
-results/    experiment outputs (JSON): the numbers behind the findings
-figures/    generated figures (mechanism diagram, Point of Indistinguishability, result plots)
-```
-
-### `src/`
-| file | purpose |
-|---|---|
-| `model_client.py` | provider-neutral LLM interface (`complete_text` / `complete_structured`); the only file with model-provider code |
-| `run_experiment_v2.py` | core: typed, provenanced belief store (`SleepAgent`) and the compared memory agents |
-| `run_provenance_ablation.py` | the source-aware ablation → `results/prov_ablation_sonnet45.json` (and `_llama4` for the cross-family run) |
-| `run_mem0_spotcheck.py` | external-validity anchor: identical target items through Mem0 |
-| `instrument_reversal.py` | traces why 2/50 reversals are dropped (a Stage-1 routing error) |
-| `make_figures.py` | result plots from `results/prov_ablation_sonnet45.json` |
-| `make_schematics.py` | concept diagrams (mechanism, Point of Indistinguishability) |
-
-## Running
-
-All model access is isolated in `src/model_client.py` (a provider-neutral `complete_text` /
-`complete_structured` interface). The reference implementation uses **Anthropic Claude** via the
-official `anthropic` SDK. Models are configured by name; the API key is read from the standard
-`ANTHROPIC_API_KEY` environment variable:
-
-```bash
-export ANTHROPIC_API_KEY=<your key>
-export AGENT_MODEL=claude-sonnet-4-5                      # agent
-export JUDGE_MODEL=<a different-family model>             # cross-family presence judge only
-
-pip install -r requirements.txt
-
-python3 src/run_provenance_ablation.py   # core ablation
-python3 src/run_mem0_spotcheck.py        # external anchor
-python3 src/make_figures.py              # result plots
-python3 src/make_schematics.py           # concept diagrams
+```text
+src/belief_memory/   reusable library
+src/research/        paper/reproducibility implementation (target layout)
+examples/             integration examples
+tests/                library and conformance tests
+data/                 hand-authored research benchmark
+results/              experiment outputs
+figures/              generated research figures
+docs/                 architecture and developer documentation
 ```
 
-All model calls use temperature 0 (greedy decoding); variation across `n=100` comes from personas
-and items, not sampling. The core schema-agent metric is deterministic (source-id inspection, no
-LLM in the loop); a cross-family judge is used only for paraphrase-robust presence checks on the
-summarization baseline.
+## Research
+
+The paper's controlled experiments are kept separate from the reusable library. The research implementation may preserve experiment-specific prompts, metrics, baselines, and model clients without turning those choices into requirements for library users.
+
+## Development status
+
+The repository is currently being refactored toward the v0 reusable API. The public library layer is intentionally being stabilized before the research scripts are migrated. Do not treat the current branch as a published PyPI release yet.
+
+## Running the research implementation
+
+The current research scripts use Anthropic through `src/model_client.py` and the existing research dependencies. See `requirements.txt` and the individual research scripts for the reproduction commands.
