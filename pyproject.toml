@@ -3,7 +3,7 @@ requires = ["setuptools>=77"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "belief-memory"
+name = "sourced-memory"
 version = "0.1.0"
 description = "Source-aware admission control for persistent agent memory."
 readme = "README.md"
@@ -34,4 +34,4 @@ Issues = "https://github.com/utegenf/Belief-Updating-for-Persistent-Agent-Memory
 
 [tool.setuptools.packages.find]
 where = ["src"]
-include = ["belief_memory*"]
+include = ["sourced_memory*"]
